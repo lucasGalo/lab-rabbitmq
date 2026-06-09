@@ -19,11 +19,14 @@ spec:
         ports:
         - containerPort: 5672   # AMQP
         - containerPort: 15672  # UI
+        - containerPort: 15692  # Prometheus metrics
         env:
         - name: RABBITMQ_DEFAULT_USER
           value: "admin"
         - name: RABBITMQ_DEFAULT_PASS
           value: "admin123"
+        - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS
+          value: "-rabbitmq_prometheus"
         volumeMounts:
         - name: rabbitmq-data
           mountPath: /var/lib/rabbitmq
@@ -60,5 +63,9 @@ spec:
     targetPort: 15672
     nodePort: 31672
     name: management
+  - port: 15692
+    targetPort: 15692
+    nodePort: 32692
+    name: prometheus
   selector:
     app: rabbitmq
